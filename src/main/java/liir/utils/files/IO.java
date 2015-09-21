@@ -344,6 +344,8 @@ public class IO {
                 deprels.add("");
 
 
+
+
                 for (liir.nlp.representation.Word w : s){
 
                     forms.add(w.getStr());
@@ -380,4 +382,75 @@ public class IO {
 
         return text;
     }
+
+    public static List<SentenceData09> textToSentenceData09NoBOW(Text txt) throws IOException, SAXException {
+
+        List<SentenceData09> text = new ArrayList<>();
+
+        for (liir.nlp.representation.Sentence s : txt){
+            SentenceData09 instance = new SentenceData09();
+            ArrayList<String> forms = new ArrayList<String>();
+            ArrayList<String> lemmas = new ArrayList<String>();
+            ArrayList<String> poss = new ArrayList<String>();
+            ArrayList<Integer> heads = new ArrayList<Integer>();
+            ArrayList<String> deprels = new ArrayList<String>();
+
+
+            for (liir.nlp.representation.Word w : s){
+
+                forms.add(w.getStr());
+                lemmas.add(w.getLemma());
+                poss.add(w.getPos());
+                if (!w.getHead().equals(""))
+
+                    heads.add(Integer.parseInt(w.getHead()));
+                else
+                    heads.add(-1);
+
+
+                deprels.add(w.getDeprel());
+
+
+            }
+
+            int[] ints = new int[heads.size()];
+            for (int j = 0; j < heads.size(); j++)
+                ints[j] = heads.get(j);
+            instance.init(forms.toArray(new String[forms.size()]));
+            instance.plemmas = lemmas.toArray(new String[lemmas.size()]);
+            instance.ppos = poss.toArray(new String[poss.size()]);
+            instance.pheads = ints;
+            instance.plabels = deprels.toArray(new String[deprels.size()]);
+
+            instance.pfeats = new String[forms.size()];
+            text.add(instance);
+
+        }
+
+
+
+
+        return text;
+    }
+
+
+    public static List<Sentence> textToSentence(Text txt) throws IOException, SAXException {
+
+
+
+                    List<Sentence> text = new ArrayList<>();
+
+                    List<SentenceData09>  sen09s = textToSentenceData09NoBOW(txt);
+
+        for (SentenceData09 instance : sen09s){
+                        text.add(new Sentence(instance, false));
+
+                    }
+
+
+
+
+        return text;
+    }
+
 }

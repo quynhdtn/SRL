@@ -260,7 +260,7 @@ public class PipelineExtended extends SemanticRoleLabeler{
         return pipeline;
     }
 
-    public static PipelineExtended fromZipFile(ZipFile zipFile) throws ZipException, IOException, ClassNotFoundException {
+    public static PipelineExtended fromZipFile(ZipFile zipFile) throws IOException, ClassNotFoundException {
         return fromZipFile(zipFile,new Step[]{Step.pi,Step.pd,Step.ai,Step.ac});
     }
 

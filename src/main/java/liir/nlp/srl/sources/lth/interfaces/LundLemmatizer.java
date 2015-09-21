@@ -2,6 +2,7 @@ package liir.nlp.srl.sources.lth.interfaces;
 
 import is2.data.SentenceData09;
 import is2.lemmatizer.*;
+import liir.nlp.interfaces.preprocessing.Processor;
 import liir.nlp.representation.Sentence;
 import liir.nlp.representation.Text;
 import liir.nlp.sources.stanford.Tokenizer;
@@ -18,10 +19,11 @@ import java.util.List;
 /**
  * Created by quynhdo on 31/08/15.
  */
-public class LundLemmatizer {
+public class LundLemmatizer extends Processor{
     Lemmatizer l ;
 
     public LundLemmatizer(String modelPath) throws IOException {
+        super("Lund Lemmatizer");
         l = BohnetHelper.getLemmatizer(new File(modelPath));
 
     }
@@ -68,33 +70,29 @@ public class LundLemmatizer {
 
     }
 
-    public void process (Text txt) throws IOException, SAXException {
+    public Text processToText (Text txt)  {
 
-        List<SentenceData09> data = IO.textToSentenceData09(txt);
+        try {
+            List<SentenceData09> data = IO.textToSentenceData09(txt);
 
-        for (int i =0;i<data.size();i++){
-                SentenceData09 sen09= data.get(i);
+            for (int i = 0; i < data.size(); i++) {
+                SentenceData09 sen09 = data.get(i);
                 Sentence sen = txt.get(i);
                 l.apply(sen09);
 
-                for (int  k=0; k<sen09.forms.length; k++)
-                    sen.get(k).setLemma(sen09.plemmas[k]);
+                for (int k = 1; k < sen09.forms.length; k++)
+                    sen.get(k-1).setLemma(sen09.plemmas[k]);
             }
 
 
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return txt;
 
     }
 
     public static void main(String[] args) throws Exception {
-        LundLemmatizer ll = new LundLemmatizer("/Users/quynhdo/Downloads/CoNLL2009-ST-English-ALL.anna-3.3.lemmatizer.model");
-        String str="Mary loves Peter. Dogs love us";
-        List<liir.nlp.representation.Word> lst = Tokenizer.processs(str);
-
-        liir.nlp.sources.stanford.SentenceSplitter sp =new liir.nlp.sources.stanford.SentenceSplitter();
-        liir.nlp.representation.Text t = sp.process(lst);
-        t.setAutomaticIndexing();
-        System.out.print(t.toXMLString());
-
-        System.out.println(ll.process("<corpus>"+t.toXMLString()+"</corpus>"));
     }
 }

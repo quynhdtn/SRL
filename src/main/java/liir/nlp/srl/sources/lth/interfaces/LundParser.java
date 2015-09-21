@@ -2,6 +2,7 @@ package liir.nlp.srl.sources.lth.interfaces;
 
 import is2.data.SentenceData09;
 import is2.parser.Parser;
+import liir.nlp.interfaces.preprocessing.Processor;
 import liir.nlp.representation.Sentence;
 import liir.nlp.representation.Text;
 import liir.utils.files.IO;
@@ -15,12 +16,13 @@ import java.util.List;
 /**
  * Created by quynhdo on 31/08/15.
  */
-public class LundParser {
+public class LundParser extends Processor{
 
     Parser p ;
 
     public LundParser(String modelPath) {
 
+        super("Lund Parser");
         p = BohnetHelper.getParser(new File(modelPath));
     }
 
@@ -74,17 +76,17 @@ public class LundParser {
 
     }
 
-    public void process (Text txt) throws IOException, SAXException {
+    public Text processToText (Text txt)  {
 
-        List<SentenceData09> data = IO.textToSentenceData09(txt);
+        try {
+            List<SentenceData09> data = IO.textToSentenceData09(txt);
 
-            for (int j=0;j<data.size();j++){
-                SentenceData09 sen09= data.get(j);
+            for (int j = 0; j < data.size(); j++) {
+                SentenceData09 sen09 = data.get(j);
                 Sentence sen = txt.get(j);
-                p.apply(sen09);
+                sen09= p.apply(sen09);
 
-                for (int  k=0; k<sen09.forms.length; k++)
-                {
+                for (int k = 0; k < sen09.forms.length; k++) {
                     sen.get(k).setHead(String.valueOf(sen09.pheads[k]));
                     sen.get(k).setDeprel(String.valueOf(sen09.plabels[k]));
 
@@ -93,7 +95,10 @@ public class LundParser {
 
             }
 
-
+        }
+        catch ( Exception e){
+            e.printStackTrace();        }
+        return txt;
 
     }
 

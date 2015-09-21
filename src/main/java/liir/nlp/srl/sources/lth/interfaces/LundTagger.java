@@ -2,8 +2,10 @@ package liir.nlp.srl.sources.lth.interfaces;
 
 import is2.data.SentenceData09;
 import is2.tag.Tagger;
+import liir.nlp.interfaces.preprocessing.Processor;
 import liir.nlp.representation.Sentence;
 import liir.nlp.representation.Text;
+import liir.nlp.sources.stanford.SentenceSplitter;
 import liir.nlp.sources.stanford.Tokenizer;
 import liir.utils.files.IO;
 import org.xml.sax.SAXException;
@@ -16,10 +18,35 @@ import java.util.List;
 /**
  * Created by quynhdo on 31/08/15.
  */
-public class LundTagger {
+public class LundTagger extends Processor {
     Tagger t;
     public LundTagger(String modelPath) throws IOException {
+        super("Lund Tagger");
         t = BohnetHelper.getTagger(new File(modelPath));
+
+    }
+
+    public Text processToText(Text txt) {
+        try {
+            List<SentenceData09> data = IO.textToSentenceData09(txt);
+
+                for (int j=0;j<data.size();j++){
+                    SentenceData09 sen09= data.get(j);
+                    Sentence sen = txt.get(j);
+                    t.apply(sen09);
+
+                    for (int  k=1; k<sen09.forms.length; k++)
+                        sen.get(k-1).setPos(sen09.ppos[k]);
+                }
+
+            return txt;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        }
+
+        return null;
 
     }
 
@@ -72,22 +99,32 @@ public class LundTagger {
         LundParser lp = new LundParser("/Users/quynhdo/Downloads/CoNLL2009-ST-English-ALL.anna-3.3.parser.model");
         LundSRL srl = new LundSRL("/Users/quynhdo/Downloads/CoNLL2009-ST-English-ALL.anna-3.3.srl-4.1.srl.model");
         String str="The school closes today.";
-        List<liir.nlp.representation.Word> lst = Tokenizer.processs(str);
 
-        liir.nlp.sources.stanford.SentenceSplitter sp =new liir.nlp.sources.stanford.SentenceSplitter();
-        liir.nlp.representation.Text t = sp.process(lst);
-        t.setAutomaticIndexing();
-        System.out.print(t.toXMLString());
-        String txt=ll.process("<corpus>" + t.toXMLString() + "</corpus>");
-        System.out.println(txt);
-        txt=
-        lt.process("<corpus>" + txt + "</corpus>");
-        System.out.println(txt);
-        txt=lp.process("<corpus>" + txt + "</corpus>");
-        System.out.println(txt);
-        txt = srl.process(txt);
-        System.out.println(txt);
 
+        Tokenizer tk =new Tokenizer();
+
+
+        String[] lst = tk.process(str);
+
+        SentenceSplitter ss =new SentenceSplitter();
+
+        Text txt = ss.processToText(lst);
+
+
+       txt.setAutomaticIndexing();
+
+        ll.processToText(txt);
+
+        lt.processToText(txt);
+
+        System.out.println(txt.toXMLString());
+
+
+        lp.processToText(txt);
+
+        System.out.println(txt.toXMLString());
+
+       txt = srl.processToText(txt);
 
 
     }
