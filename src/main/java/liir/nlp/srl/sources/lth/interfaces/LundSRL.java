@@ -1,23 +1,18 @@
 package liir.nlp.srl.sources.lth.interfaces;
 
-import is2.data.SentenceData09;
 import liir.nlp.interfaces.preprocessing.Processor;
-import liir.nlp.io.XMLReader;
-import liir.nlp.representation.Sentence;
-import liir.nlp.representation.Text;
+import liir.nlp.core.representation.io.XMLReader;
+import liir.nlp.core.representation.Text;
 import liir.nlp.srl.sources.lth.pipeline.PipelineExtended;
 import liir.utils.files.IO;
 import org.xml.sax.SAXException;
 import se.lth.cs.srl.SemanticRoleLabeler;
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.languages.Language;
-import se.lth.cs.srl.pipeline.Step;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
 /**

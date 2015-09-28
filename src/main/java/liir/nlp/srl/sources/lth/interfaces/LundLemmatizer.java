@@ -3,15 +3,13 @@ package liir.nlp.srl.sources.lth.interfaces;
 import is2.data.SentenceData09;
 import is2.lemmatizer.*;
 import liir.nlp.interfaces.preprocessing.Processor;
-import liir.nlp.representation.Sentence;
-import liir.nlp.representation.Text;
-import liir.nlp.sources.stanford.Tokenizer;
+import liir.nlp.core.representation.Sentence;
+import liir.nlp.core.representation.Text;
 import liir.utils.files.IO;
 import org.xml.sax.SAXException;
 import se.lth.cs.srl.util.BohnetHelper;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 

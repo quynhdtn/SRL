@@ -1,7 +1,7 @@
 package liir.utils.files;
 
 import is2.data.SentenceData09;
-import liir.nlp.representation.Text;
+import liir.nlp.core.representation.Text;
 import liir.utils.types.Tuple3;
 import org.xml.sax.SAXException;
 import se.lth.cs.srl.corpus.Predicate;
@@ -273,7 +273,7 @@ public class IO {
         for (Text txt : texts){
                     List<SentenceData09> text = new ArrayList<>();
 
-                    for (liir.nlp.representation.Sentence s : txt){
+                    for (liir.nlp.core.representation.Sentence s : txt){
                         SentenceData09 instance = new SentenceData09();
                         ArrayList<String> forms = new ArrayList<String>();
                         ArrayList<String> lemmas = new ArrayList<String>();
@@ -287,7 +287,7 @@ public class IO {
                         deprels.add("");
 
 
-                        for (liir.nlp.representation.Word w : s){
+                        for (liir.nlp.core.representation.Word w : s){
 
                                     forms.add(w.getStr());
                                     lemmas.add(w.getLemma());
@@ -330,7 +330,7 @@ public class IO {
 
             List<SentenceData09> text = new ArrayList<>();
 
-            for (liir.nlp.representation.Sentence s : txt){
+            for (liir.nlp.core.representation.Sentence s : txt){
                 SentenceData09 instance = new SentenceData09();
                 ArrayList<String> forms = new ArrayList<String>();
                 ArrayList<String> lemmas = new ArrayList<String>();
@@ -346,7 +346,7 @@ public class IO {
 
 
 
-                for (liir.nlp.representation.Word w : s){
+                for (liir.nlp.core.representation.Word w : s){
 
                     forms.add(w.getStr());
                     lemmas.add(w.getLemma());
@@ -387,7 +387,7 @@ public class IO {
 
         List<SentenceData09> text = new ArrayList<>();
 
-        for (liir.nlp.representation.Sentence s : txt){
+        for (liir.nlp.core.representation.Sentence s : txt){
             SentenceData09 instance = new SentenceData09();
             ArrayList<String> forms = new ArrayList<String>();
             ArrayList<String> lemmas = new ArrayList<String>();
@@ -396,7 +396,7 @@ public class IO {
             ArrayList<String> deprels = new ArrayList<String>();
 
 
-            for (liir.nlp.representation.Word w : s){
+            for (liir.nlp.core.representation.Word w : s){
 
                 forms.add(w.getStr());
                 lemmas.add(w.getLemma());
